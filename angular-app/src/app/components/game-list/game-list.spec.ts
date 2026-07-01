@@ -1,6 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameListComponent } from './game-list';
 import { ActivatedRoute } from '@angular/router';
+import { GameService } from '../../services/game';
+import { of } from 'rxjs';
+
+class MockGameService {
+  getGames() {
+    return of([
+      { id: 1, title: 'Half-Life 3', price: 29.99, available: true }
+    ]);
+  }
+  addGame(title: string, price: number) {
+    return of({ id: 4, title, price, available: true });
+  }
+}
 
 describe('GameListComponent', () => {
   let component: GameListComponent;
@@ -19,7 +32,8 @@ describe('GameListComponent', () => {
               }
             }
           }
-        }
+        },
+        { provide: GameService, useClass: MockGameService }
       ]
     }).compileComponents();
 

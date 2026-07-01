@@ -1,6 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AddGameFormComponent } from './add-game-form';
 import { provideRouter } from '@angular/router';
+import { GameService } from '../../services/game';
+import { of } from 'rxjs';
+
+class MockGameService {
+  addGame(title: string, price: number) {
+    return of({ id: 4, title, price, available: true });
+  }
+}
 
 describe('AddGameFormComponent', () => {
   let component: AddGameFormComponent;
@@ -10,7 +18,8 @@ describe('AddGameFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AddGameFormComponent],
       providers: [
-        provideRouter([])
+        provideRouter([]),
+        { provide: GameService, useClass: MockGameService }
       ]
     }).compileComponents();
 

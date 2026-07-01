@@ -1,37 +1,49 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 export interface Game {
   id: number;
   title: string;
   price: number;
-  available: boolean;
+  available?: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
-  private games: Game[] = [
-    { id: 1, title: 'Half-Life 3', price: 29.99, available: true },
-    { id: 2, title: 'Cyberpunk 2077', price: 49.99, available: false },
-    { id: 3, title: 'Portal 3', price: 19.99, available: true }
-  ];
+  private apiUrl = 'http://127.0.0.1:8000/api/games/';
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   getGames(): Observable<Game[]> {
-    return of(this.games);
+    return this.http.get<Game[]>(this.apiUrl).pipe(
+      catchError(this.handleError)
+    );
   }
 
   addGame(title: string, price: number): Observable<Game> {
-    const newGame: Game = {
-      id: this.games.length + 1,
+    const payload = {
       title: title,
       price: price,
-      available: true
+      publisher: 1
     };
-    this.games.push(newGame);
-    return of(newGame);
+
+    return this.http.post<Game>(this.apiUrl, payload).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'An unknown error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Client-side error: ${error.error.message}`;
+    } else {
+      errorMessage = `Server returned code ${error.status}, body was: ${error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }
