@@ -18,7 +18,7 @@ This document tracks the progress of the day-wise coding exercises for Angular a
 | Day 4 | Completed | Implemented client-side routing, router-outlet, and dynamic GameDetailComponent details page view. |
 | Day 5 | Completed | Integrated Reactive Forms, added custom validation, and validation error status messages for new games. |
 | Day 6 | Completed | Integrated HttpClient to fetch game catalog list from Django REST endpoint. |
-| Day 7 | Pending | |
+| Day 7 | Completed | Created AuthService, authInterceptor to append Token headers, and functional authGuard. |
 | Day 8 | Pending | |
 | Day 9 | Pending | |
 | Day 10| Pending | |
