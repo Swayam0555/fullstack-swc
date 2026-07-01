@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    command: uv run python manage.py runserver 0.0.0.0:8000
+
+  worker:
+    build: .
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    command: uv run celery -A gamekey_platform worker --loglevel=info
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"

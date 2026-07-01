@@ -38,4 +38,4 @@ This document tracks the progress of the day-wise coding exercises for Angular a
 | Day 7 | Completed | Implemented HMAC-SHA256 signed webhooks for key expiration notifications. |
 | Day 8 | Completed | Configured Celery, created WebhookDeliveryLog model, and send_expiry_webhook_async task with exponential backoff. |
 | Day 9 | Completed | Configured pytest, pytest-django, and pytest-mock with 92% test coverage. |
-| Day 10| Pending | |
+| Day 10 | Completed | Containerized the multi-service architecture using Dockerfile and docker-compose.yml. |
