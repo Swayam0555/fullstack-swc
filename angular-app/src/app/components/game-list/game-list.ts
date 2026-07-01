@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { GameService, Game } from '../../services/game';
 import { CartService } from '../../services/cart';
+import { GameCardComponent } from '../game-card/game-card';
 
 @Component({
   selector: 'app-game-list',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, GameCardComponent],
   templateUrl: './game-list.html',
   styleUrl: './game-list.css'
 })
@@ -54,5 +55,10 @@ export class GameListComponent implements OnInit {
 
   addToCart(game: Game): void {
     this.cartService.addToCart(game);
+  }
+
+  onRemoveGame(gameId: number): void {
+    this.games = this.games.filter(g => g.id !== gameId);
+    console.log(`[Parent Component] Removed game ID: ${gameId}`);
   }
 }
