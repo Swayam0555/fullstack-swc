@@ -10,7 +10,9 @@
         </div>
       </div>
       <nav class="flex items-center gap-6 text-sm font-medium text-slate-400">
-        <span class="text-emerald-400 flex items-center gap-1.5">
+        <a routerLink="/games" routerLinkActive="text-emerald-400" [routerLinkActiveOptions]="{exact: true}" class="hover:text-white transition">Catalog</a>
+        <a routerLink="/games/add" routerLinkActive="text-emerald-400" class="hover:text-white transition">Add Game</a>
+        <span class="text-emerald-400 flex items-center gap-1.5 ml-2">
           <span class="h-2 w-2 rounded-full bg-emerald-400"></span> Live Portal
         </span>
       </nav>
