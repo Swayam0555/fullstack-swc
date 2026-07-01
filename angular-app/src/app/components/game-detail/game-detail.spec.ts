@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { GameListComponent } from './game-list';
+import { GameDetailComponent } from './game-detail';
 import { ActivatedRoute } from '@angular/router';
 
-describe('GameListComponent', () => {
-  let component: GameListComponent;
-  let fixture: ComponentFixture<GameListComponent>;
+describe('GameDetailComponent', () => {
+  let component: GameDetailComponent;
+  let fixture: ComponentFixture<GameDetailComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GameListComponent],
+      imports: [GameDetailComponent],
       providers: [
         {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
               paramMap: {
-                get: (key: string) => null
+                get: (key: string) => '1'
               }
             }
           }
@@ -23,7 +23,7 @@ describe('GameListComponent', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GameListComponent);
+    fixture = TestBed.createComponent(GameDetailComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

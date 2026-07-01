@@ -31,7 +31,7 @@ This document tracks the progress of the day-wise coding exercises for Angular a
 |-----|--------|----------------------------------|
 | Day 1 | Completed | Scaffolded application and integrated python-decouple. |
 | Day 2 | Completed | Created core database schema (Publisher, Game, GameKey models) and ran migrations. |
-| Day 3 | Pending | |
+| Day 3 | Completed | Built Game & Publisher API endpoints using DRF Serializers, ViewSets, and Router. |
 | Day 4 | Pending | |
 | Day 5 | Pending | |
 | Day 6 | Pending | |
