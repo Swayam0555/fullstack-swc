@@ -1,0 +1,15 @@
+# Dependencies
+.github/
+node_modules/
+.angular/
+dist/
+venv/
+.venv/
+__pycache__/
+*.pyc
+db.sqlite3
+.idea/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
