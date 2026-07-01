@@ -13,7 +13,7 @@ This document tracks the progress of the day-wise coding exercises for Angular a
 | Day | Status | Details / Assumptions / Blockers |
 |-----|--------|----------------------------------|
 | Day 1 | Completed | Scaffolded application and integrated Tailwind CSS. |
-| Day 2 | Pending | |
+| Day 2 | Completed | Created standalone GameListComponent and Tailwind UI with dynamic control flow. |
 | Day 3 | Pending | |
 | Day 4 | Pending | |
 | Day 5 | Pending | |
@@ -29,7 +29,7 @@ This document tracks the progress of the day-wise coding exercises for Angular a
 
 | Day | Status | Details / Assumptions / Blockers |
 |-----|--------|----------------------------------|
-| Day 1 | Pending | |
+| Day 1 | Completed | Scaffolded application and integrated python-decouple. |
 | Day 2 | Pending | |
 | Day 3 | Pending | |
 | Day 4 | Pending | |
