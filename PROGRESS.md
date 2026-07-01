@@ -21,7 +21,7 @@ This document tracks the progress of the day-wise coding exercises for Angular a
 | Day 7 | Completed | Created AuthService, authInterceptor to append Token headers, and functional authGuard. |
 | Day 8 | Completed | Built CartService using writeable/computed signals, and synchronized with localStorage. |
 | Day 9 | Completed | Created GameCardComponent child component and keyFormat custom string formatting pipe. |
-| Day 10| Pending | |
+| Day 10 | Completed | Wrote comprehensive unit tests for GameService and AddGameFormComponent, built production bundles, and created vercel.json. |
 
 ---
 
