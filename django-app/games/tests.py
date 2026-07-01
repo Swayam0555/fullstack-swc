@@ -111,6 +111,7 @@ class AuthAndPermissionsTests(APITestCase):
 
 from django.core.management import call_command
 from io import StringIO
+from unittest import mock
 
 
 class CheckExpiredKeysCommandTests(APITestCase):
@@ -142,13 +143,25 @@ class CheckExpiredKeysCommandTests(APITestCase):
             expires_at=timezone.now() + timedelta(hours=2)
         )
 
-    def test_command_expires_past_keys(self):
+    @mock.patch('requests.post')
+    def test_command_expires_past_keys(self, mock_post):
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_post.return_value = mock_response
+
         out = StringIO()
         call_command('check_expired_keys', stdout=out)
-        self.assertIn('Expired 1 keys.', out.getvalue())
+        self.assertIn('Expired 1 keys (sync webhooks sent).', out.getvalue())
         
         self.key_expired.refresh_from_db()
         self.key_active.refresh_from_db()
         
         self.assertEqual(self.key_expired.status, 'expired')
         self.assertEqual(self.key_active.status, 'active')
+
+        # Verify requests.post was called with signature header
+        self.assertEqual(mock_post.call_count, 1)
+        args, kwargs = mock_post.call_args
+        self.assertEqual(args[0], self.publisher.webhook_url)
+        self.assertIn('X-Signature', kwargs['headers'])
+        self.assertTrue(kwargs['headers']['X-Signature'].startswith('sha256='))

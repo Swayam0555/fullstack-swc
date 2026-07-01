@@ -35,7 +35,7 @@ This document tracks the progress of the day-wise coding exercises for Angular a
 | Day 4 | Completed | Enabled Token Authentication, implemented custom IsOwnerOrReadOnly permissions, and added registration API. |
 | Day 5 | Completed | Implemented transactional Orders API with pessimistic locking select_for_update() to prevent double allocations. |
 | Day 6 | Completed | Installed django-cors-headers, configured CORS middleware, and allowed origins. |
-| Day 7 | Pending | |
+| Day 7 | Completed | Implemented HMAC-SHA256 signed webhooks for key expiration notifications. |
 | Day 8 | Pending | |
 | Day 9 | Pending | |
 | Day 10| Pending | |
