@@ -14,7 +14,7 @@ This document tracks the progress of the day-wise coding exercises for Angular a
 |-----|--------|----------------------------------|
 | Day 1 | Completed | Scaffolded application and integrated Tailwind CSS. |
 | Day 2 | Completed | Created standalone GameListComponent and Tailwind UI with dynamic control flow. |
-| Day 3 | Pending | |
+| Day 3 | Completed | Implemented GameService for business logic and consumed via RxJS Observables in component. |
 | Day 4 | Pending | |
 | Day 5 | Pending | |
 | Day 6 | Pending | |
