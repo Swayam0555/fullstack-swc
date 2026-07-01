@@ -42,3 +42,21 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     game_key = models.OneToOneField(GameKey, on_delete=models.CASCADE)
+
+
+class WebhookDeliveryLog(models.Model):
+    game_key = models.CharField(max_length=50)
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
+    payload = models.JSONField()
+    response_status = models.IntegerField(null=True, blank=True)
+    error_message = models.TextField(blank=True)
+    attempt = models.IntegerField(default=0)
+    success = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        status = 'OK' if self.success else 'FAIL'
+        return f"[{status}] {self.game_key} attempt #{self.attempt}"

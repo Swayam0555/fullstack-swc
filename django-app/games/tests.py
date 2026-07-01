@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from django.utils import timezone
 from datetime import timedelta
-from .models import Publisher, Game, GameKey, Order, OrderItem
+from .models import Publisher, Game, GameKey, Order, OrderItem, WebhookDeliveryLog
 
 
 class AuthAndPermissionsTests(APITestCase):
@@ -151,7 +151,7 @@ class CheckExpiredKeysCommandTests(APITestCase):
 
         out = StringIO()
         call_command('check_expired_keys', stdout=out)
-        self.assertIn('Expired 1 keys (sync webhooks sent).', out.getvalue())
+        self.assertIn('Expired 1 keys. Webhook tasks dispatched to Celery.', out.getvalue())
         
         self.key_expired.refresh_from_db()
         self.key_active.refresh_from_db()
@@ -165,3 +165,6 @@ class CheckExpiredKeysCommandTests(APITestCase):
         self.assertEqual(args[0], self.publisher.webhook_url)
         self.assertIn('X-Signature', kwargs['headers'])
         self.assertTrue(kwargs['headers']['X-Signature'].startswith('sha256='))
+
+        # Verify WebhookDeliveryLog was created
+        self.assertTrue(WebhookDeliveryLog.objects.filter(game_key="EXP-KEY-1", success=True).exists())
