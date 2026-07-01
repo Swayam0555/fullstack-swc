@@ -3,12 +3,14 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
-from .models import Publisher, Game
+from django.utils import timezone
+from datetime import timedelta
+from .models import Publisher, Game, GameKey, Order, OrderItem
 
 
 class AuthAndPermissionsTests(APITestCase):
     def setUp(self):
-        # Create a test user and a publisher
+        # Create test users and publishers
         self.user1 = User.objects.create_user(username='publisher1', password='password123')
         self.token1 = Token.objects.create(user=self.user1)
         
@@ -46,7 +48,6 @@ class AuthAndPermissionsTests(APITestCase):
     def test_authenticated_game_creation_allowed(self):
         url = '/api/games/'
         data = {'title': 'Unreal Tournament', 'publisher': self.publisher1.id, 'price': '19.99'}
-        # Authenticate with token
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -54,7 +55,6 @@ class AuthAndPermissionsTests(APITestCase):
     def test_unauthorized_game_modification_blocked(self):
         url = f'/api/games/{self.game1.id}/'
         data = {'title': 'Fortnite Updated', 'price': '9.99', 'publisher': self.publisher1.id}
-        # Authenticate with user2's token (not the owner of publisher1)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token2.key)
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -62,7 +62,48 @@ class AuthAndPermissionsTests(APITestCase):
     def test_authorized_game_modification_allowed(self):
         url = f'/api/games/{self.game1.id}/'
         data = {'title': 'Fortnite Updated', 'price': '9.99', 'publisher': self.publisher1.id}
-        # Authenticate with user1's token (owner of publisher1)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_unauthenticated_order_creation_blocked(self):
+        url = '/api/orders/'
+        data = {'game_id': self.game1.id}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_order_creation_with_preloaded_key(self):
+        # Pre-load an active unowned key
+        preloaded_key = GameKey.objects.create(
+            key_string="PRELOADED-KEY-1234",
+            game=self.game1,
+            status='active',
+            expires_at=timezone.now() + timedelta(days=10)
+        )
+
+        url = '/api/orders/'
+        data = {'game_id': self.game1.id}
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
+        response = self.client.post(url, data, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['key'], "PRELOADED-KEY-1234")
+        self.assertEqual(response.data['game'], self.game1.title)
+        
+        # Verify database update
+        preloaded_key.refresh_from_db()
+        self.assertEqual(preloaded_key.owner, self.user1)
+
+    def test_order_creation_without_preloaded_key(self):
+        url = '/api/orders/'
+        data = {'game_id': self.game1.id}
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token1.key)
+        response = self.client.post(url, data, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIsNotNone(response.data['key'])
+        
+        # Check generated key exists in database and belongs to user1
+        key_in_db = GameKey.objects.get(key_string=response.data['key'])
+        self.assertEqual(key_in_db.owner, self.user1)
+        self.assertEqual(key_in_db.game, self.game1)

@@ -32,3 +32,13 @@ class GameKey(models.Model):
 
     def __str__(self):
         return self.key_string
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    purchased_at = models.DateTimeField(auto_now_add=True)
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    game_key = models.OneToOneField(GameKey, on_delete=models.CASCADE)

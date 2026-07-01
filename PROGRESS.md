@@ -16,7 +16,7 @@ This document tracks the progress of the day-wise coding exercises for Angular a
 | Day 2 | Completed | Created standalone GameListComponent and Tailwind UI with dynamic control flow. |
 | Day 3 | Completed | Implemented GameService for business logic and consumed via RxJS Observables in component. |
 | Day 4 | Completed | Implemented client-side routing, router-outlet, and dynamic GameDetailComponent details page view. |
-| Day 5 | Pending | |
+| Day 5 | Completed | Integrated Reactive Forms, added custom validation, and validation error status messages for new games. |
 | Day 6 | Pending | |
 | Day 7 | Pending | |
 | Day 8 | Pending | |
