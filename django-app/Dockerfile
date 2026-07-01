@@ -8,4 +8,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Collect static files for WhiteNoise
+RUN python manage.py collectstatic --noinput
+
+# Railway injects PORT; default to 8000
+ENV PORT=8000
+EXPOSE ${PORT}
+
+CMD gunicorn gamekey_platform.wsgi:application --bind 0.0.0.0:${PORT}
