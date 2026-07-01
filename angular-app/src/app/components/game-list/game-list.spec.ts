@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameListComponent } from './game-list';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../../services/game';
+import { CartService } from '../../services/cart';
 import { of } from 'rxjs';
 
 class MockGameService {
@@ -33,7 +34,8 @@ describe('GameListComponent', () => {
             }
           }
         },
-        { provide: GameService, useClass: MockGameService }
+        { provide: GameService, useClass: MockGameService },
+        { provide: CartService, useValue: { addToCart: () => {} } }
       ]
     }).compileComponents();
 

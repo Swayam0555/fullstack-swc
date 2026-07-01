@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { GameService, Game } from '../../services/game';
+import { CartService } from '../../services/cart';
 
 @Component({
   selector: 'app-game-list',
@@ -15,7 +16,10 @@ export class GameListComponent implements OnInit {
   newGamePrice: number = 0;
   games: Game[] = [];
 
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.fetchGames();
@@ -46,5 +50,9 @@ export class GameListComponent implements OnInit {
 
   toggleAvailability(game: Game): void {
     game.available = !game.available;
+  }
+
+  addToCart(game: Game): void {
+    this.cartService.addToCart(game);
   }
 }

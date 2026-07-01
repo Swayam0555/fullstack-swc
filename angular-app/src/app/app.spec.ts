@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
+import { CartService } from './services/cart';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -9,7 +10,8 @@ describe('App', () => {
       imports: [App],
       providers: [
         provideRouter([]),
-        provideHttpClient()
+        provideHttpClient(),
+        { provide: CartService, useValue: { totalItems: () => 0, totalPrice: () => 0.00 } }
       ]
     }).compileComponents();
   });
