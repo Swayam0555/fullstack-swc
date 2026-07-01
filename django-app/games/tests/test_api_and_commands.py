@@ -5,7 +5,10 @@ from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from django.utils import timezone
 from datetime import timedelta
-from .models import Publisher, Game, GameKey, Order, OrderItem, WebhookDeliveryLog
+from games.models import Publisher, Game, GameKey, Order, OrderItem, WebhookDeliveryLog
+from django.core.management import call_command
+from io import StringIO
+from unittest import mock
 
 
 class AuthAndPermissionsTests(APITestCase):
@@ -107,11 +110,6 @@ class AuthAndPermissionsTests(APITestCase):
         key_in_db = GameKey.objects.get(key_string=response.data['key'])
         self.assertEqual(key_in_db.owner, self.user1)
         self.assertEqual(key_in_db.game, self.game1)
-
-
-from django.core.management import call_command
-from io import StringIO
-from unittest import mock
 
 
 class CheckExpiredKeysCommandTests(APITestCase):

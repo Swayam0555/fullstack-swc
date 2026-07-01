@@ -37,5 +37,5 @@ This document tracks the progress of the day-wise coding exercises for Angular a
 | Day 6 | Completed | Installed django-cors-headers, configured CORS middleware, and allowed origins. |
 | Day 7 | Completed | Implemented HMAC-SHA256 signed webhooks for key expiration notifications. |
 | Day 8 | Completed | Configured Celery, created WebhookDeliveryLog model, and send_expiry_webhook_async task with exponential backoff. |
-| Day 9 | Pending | |
+| Day 9 | Completed | Configured pytest, pytest-django, and pytest-mock with 92% test coverage. |
 | Day 10| Pending | |
