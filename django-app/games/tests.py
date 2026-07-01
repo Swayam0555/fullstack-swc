@@ -107,3 +107,48 @@ class AuthAndPermissionsTests(APITestCase):
         key_in_db = GameKey.objects.get(key_string=response.data['key'])
         self.assertEqual(key_in_db.owner, self.user1)
         self.assertEqual(key_in_db.game, self.game1)
+
+
+from django.core.management import call_command
+from io import StringIO
+
+
+class CheckExpiredKeysCommandTests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='publisher_user', password='password123')
+        self.publisher = Publisher.objects.create(
+            name="Ubisoft",
+            webhook_url="https://ubisoft.com/webhook",
+            webhook_secret="ubisecret",
+            user=self.user
+        )
+        self.game = Game.objects.create(
+            title="Assassin's Creed",
+            publisher=self.publisher,
+            price=59.99
+        )
+        # Create an expired active key
+        self.key_expired = GameKey.objects.create(
+            key_string="EXP-KEY-1",
+            game=self.game,
+            status='active',
+            expires_at=timezone.now() - timedelta(hours=2)
+        )
+        # Create a non-expired active key
+        self.key_active = GameKey.objects.create(
+            key_string="ACT-KEY-2",
+            game=self.game,
+            status='active',
+            expires_at=timezone.now() + timedelta(hours=2)
+        )
+
+    def test_command_expires_past_keys(self):
+        out = StringIO()
+        call_command('check_expired_keys', stdout=out)
+        self.assertIn('Expired 1 keys.', out.getvalue())
+        
+        self.key_expired.refresh_from_db()
+        self.key_active.refresh_from_db()
+        
+        self.assertEqual(self.key_expired.status, 'expired')
+        self.assertEqual(self.key_active.status, 'active')
